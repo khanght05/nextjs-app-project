@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qc-engine.local/schemas/impact.schema.json",
+  "title": "impact.json — routing decision (stage 3)",
+  "type": "object",
+  "required": ["schema_version", "affected", "route_to"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "affected": {
+      "type": "object",
+      "required": ["files"],
+      "properties": {
+        "files":   { "type": "array", "items": { "type": "string" } },
+        "symbols": { "type": "array", "items": { "type": "string" } },
+        "apis": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["method", "path"],
+            "properties": {
+              "method": { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+              "path": { "type": "string" },
+              "spec_ref": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "db_objects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "name"],
+            "properties": {
+              "kind": { "enum": ["table", "view", "column", "index", "migration"] },
+              "name": { "type": "string" },
+              "operation": { "enum": ["select", "insert", "update", "delete", "ddl"] }
+            }
+          }
+        },
+        "ui_routes":      { "type": "array", "items": { "type": "string" } },
+        "existing_tests": { "type": "array", "items": { "type": "string" } },
+        "blast_radius": {
+          "type": "object",
+          "properties": {
+            "direct": { "type": "integer" },
+            "transitive": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "route_to": {
+      "type": "array",
+      "description": "Authoritative. The Runner spawns exactly these agents. Empty is valid.",
+      "items": { "enum": ["backend", "frontend", "security", "ux", "data"] },
+      "uniqueItems": true
+    },
+    "skip_reason": { "type": "object", "additionalProperties": { "type": "string" } }
+  }
+}

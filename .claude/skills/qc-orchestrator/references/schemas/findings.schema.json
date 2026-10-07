@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qc-engine.local/schemas/findings.schema.json",
+  "title": "Findings array",
+  "type": "array",
+  "items": { "$ref": "#/$defs/finding" },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "id", "agent", "severity", "category", "file", "title", "why", "evidence"],
+      "properties": {
+        "schema_version": { "const": "1.0" },
+        "id": { "type": "string", "pattern": "^F-[0-9a-f]{6}$" },
+        "agent": { "enum": ["impact", "backend", "frontend", "security", "ux", "data", "judge"] },
+        "severity": { "enum": ["blocking", "major", "minor", "info"] },
+        "category": {
+          "enum": ["correctness", "security", "performance", "contract",
+                   "a11y", "ux", "data-quality", "maintainability"]
+        },
+        "file": { "type": "string", "minLength": 1 },
+        "line": { "type": ["integer", "null"], "minimum": 1 },
+        "title": { "type": "string", "minLength": 8, "maxLength": 120 },
+        "why": {
+          "type": "string", "minLength": 20,
+          "description": "A concrete failure scenario. A style opinion here is a schema violation in spirit."
+        },
+        "evidence": { "$ref": "#/$defs/evidence" },
+        "fix": { "type": "string", "description": "Unified diff preferred" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reported_by": { "type": "array", "items": { "type": "string" } },
+        "verification": {
+          "type": "object",
+          "description": "Written by the EvidenceVerifier, never by an agent",
+          "additionalProperties": false,
+          "properties": {
+            "reproduced": { "type": "boolean" },
+            "actual_output": { "type": "string", "maxLength": 4000 },
+            "reason": { "type": ["string", "null"] }
+          },
+          "required": ["reproduced"]
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": ["failing_test", "static_analysis_hit", "runtime_trace", "axe_violation",
+                   "data_check_failure", "schema_diff", "reasoning_only"]
+        },
+        "command": { "type": "string", "description": "Required unless kind is reasoning_only" },
+        "expected_signal": { "type": "string", "description": "How the verifier recognises success" },
+        "output": { "type": "string", "maxLength": 2000 },
+        "artifact": { "type": "string" }
+      },
+      "allOf": [{
+        "if": { "properties": { "kind": { "not": { "const": "reasoning_only" } } } },
+        "then": { "required": ["kind", "command", "expected_signal"] }
+      }]
+    }
+  }
+}

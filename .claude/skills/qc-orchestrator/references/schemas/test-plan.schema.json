@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qc-engine.local/schemas/test-plan.schema.json",
+  "title": "test-plan.yaml — the human approval gate artifact",
+  "type": "object",
+  "required": ["schema_version", "feature", "approved", "scenarios"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "feature": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "approved": {
+      "type": "boolean",
+      "description": "A human sets this. The generator refuses to run while it is false. Not skippable by flag."
+    },
+    "scenarios": {
+      "type": "array", "minItems": 1, "maxItems": 25,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "layer", "test_type", "when", "then", "oracle_source", "risk"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^S-[0-9]+$" },
+          "title": { "type": "string" },
+          "layer": {
+            "enum": ["unit", "api", "e2e"],
+            "description": "Cheapest layer that can prove the scenario. An e2e-heavy plan is a failed plan."
+          },
+          "test_type": {
+            "enum": ["functional", "regression", "integration", "smoke", "sanity", "uat_support"],
+            "description": "QA classification of this scenario. Replaces the old boolean `smoke` field, which nothing downstream ever read."
+          },
+          "given": {
+            "type": "object",
+            "properties": { "fixtures": { "type": "array", "items": { "type": "string" } } }
+          },
+          "when": { "type": "string" },
+          "then": { "type": "string", "minLength": 10 },
+          "oracle_source": {
+            "type": "string", "minLength": 3,
+            "description": "Where expected behaviour came from. Mandatory: no source means the model invented a requirement."
+          },
+          "risk": { "type": "string" }
+        }
+      }
+    }
+  }
+}

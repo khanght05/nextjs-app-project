@@ -1,0 +1,72 @@
+:root { color-scheme: light; }
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 420px;
+  margin: 48px auto;
+  padding: 0 16px;
+  color: #1a1a1a;
+  background: #fff;
+}
+h1 { font-size: 1.4rem; }
+
+.site-nav { display: flex; gap: 16px; margin-bottom: 24px; font-size: 0.9rem; }
+.site-nav a { color: #2563eb; text-decoration: none; }
+.site-nav a:hover { text-decoration: underline; }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; margin-bottom: 4px; font-size: 0.9rem; font-weight: 600; }
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #999;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+button:hover:not(:disabled) { background: #1d4ed8; }
+button:disabled { background: #93c5fd; cursor: not-allowed; }
+
+.error-banner {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+}
+
+.app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.app-header button { background: transparent; color: #444; border: 1px solid #ccc; }
+.app-header button:hover { background: #f3f4f6; }
+
+.add-form { display: flex; gap: 8px; margin-bottom: 16px; }
+.add-form input { flex: 1; }
+ul.task-list { list-style: none; padding: 0; margin: 0; }
+ul.task-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-bottom: 1px solid #eee;
+}
+ul.task-list li.done span { text-decoration: line-through; color: #888; }
+ul.task-list li span { flex: 1; }
+ul.task-list li button { background: transparent; color: #b91c1c; padding: 4px 8px; }
+ul.task-list li button:hover { background: #fee2e2; }
+
+.muted { color: #666; padding: 16px 4px; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}

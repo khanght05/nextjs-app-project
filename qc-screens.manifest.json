@@ -1,0 +1,13 @@
+[
+  { "name": "login", "url": "http://localhost:4100/" },
+  {
+    "name": "todo-after-login",
+    "url": "http://localhost:4100/",
+    "actions": [
+      { "fill": "#email-input", "value": "demo@example.com" },
+      { "fill": "#password-input", "value": "123456" },
+      { "click": "#login-submit" },
+      { "waitFor": ".task-list" }
+    ]
+  }
+]
