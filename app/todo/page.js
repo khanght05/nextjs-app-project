@@ -13,6 +13,7 @@ export default function TodoPage() {
   const [tasks, setTasks] = useState(null); // null = loading
   const [error, setError] = useState('');
   const [newText, setNewText] = useState('');
+  const [filter, setFilter] = useState('all'); // all | active | done
 
   const goToLogin = useCallback(() => {
     localStorage.removeItem('token');
@@ -71,6 +72,10 @@ export default function TodoPage() {
     loadTasks();
   }
 
+  const visible = (tasks || []).filter((t) =>
+    filter === 'all' ? true : filter === 'done' ? t.done : !t.done,
+  );
+
   return (
     <main>
       <header className="app-header">
@@ -101,13 +106,29 @@ export default function TodoPage() {
         <button type="submit">Thêm</button>
       </form>
 
+      {tasks !== null && tasks.length > 0 && (
+        <div className="filter-bar" role="group" aria-label="Lọc việc cần làm">
+          {[['all', 'Tất cả'], ['active', 'Đang làm'], ['done', 'Đã xong']].map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              className={filter === key ? 'active' : ''}
+              aria-pressed={filter === key}
+              onClick={() => setFilter(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {tasks === null && <p className="muted">Đang tải...</p>}
       {tasks !== null && tasks.length === 0 && (
         <p className="muted">Chưa có việc nào. Thêm việc đầu tiên ở trên.</p>
       )}
-      {tasks !== null && tasks.length > 0 && (
+      {tasks !== null && visible.length > 0 && (
         <ul className="task-list">
-          {tasks.map((t) => (
+          {visible.map((t) => (
             <li key={t.id} className={t.done ? 'done' : ''}>
               <input
                 type="checkbox"

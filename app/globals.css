@@ -70,3 +70,8 @@ ul.task-list li button:hover { background: #fee2e2; }
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;
 }
+
+.filter-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+.filter-bar button { background: transparent; color: #444; border: 1px solid #ccc; padding: 4px 12px; font-size: 0.9rem; }
+.filter-bar button:hover:not(:disabled) { background: #f3f4f6; }
+.filter-bar button.active { background: #2563eb; color: #fff; border-color: #2563eb; }
