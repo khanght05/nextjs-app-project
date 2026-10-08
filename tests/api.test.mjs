@@ -19,6 +19,7 @@ function spawnDevServer() {
   return spawn('npx', ['next', 'dev', '-p', String(PORT)], {
     cwd: process.cwd(),
     shell: true,
+    detached: process.platform !== 'win32', // own process group so kill(-pid) works
     stdio: 'ignore',
   });
 }
